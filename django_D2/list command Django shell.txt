@@ -1,0 +1,133 @@
+(venv) PS D:\SkillFactry\ProjectDjango\newspaper> py manage.py shell
+Python 3.9.6 (tags/v3.9.6:db3ff76, Jun 28 2021, 15:26:21) [MSC v.1929 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from news.models import *
+
+-------------------------------------------------
+1.Создать двух пользователей (с помощью метода User.objects.create_user('username')).
+
+>>> user1 = User.objects.create_user(username='Valera')
+>>> user2 = User.objects.create_user(username='Lera')
+Проверяем:
+>>> user1, user2
+(<User: Valera>, <User: Lera>)
+
+-------------------------------------------------
+2. Создать два объекта модели Author, связанные с пользователями.
+
+>>> Author.objects.create(authorUser=user1)
+<Author: Author object (1)>
+>>> Author.objects.create(authorUser=user2)
+<Author: Author object (2)>
+
+-------------------------------------------------
+3. Добавить 4 категории в модель Category.
+
+>>> Category.objects.create(name='Django')
+<Category: Category object (1)>
+>>> Category.objects.create(name='Python')
+<Category: Category object (2)>
+>>> Category.objects.create(name='СТУДЕНЧЕСКИЙ ЖУРНАЛ')
+<Category: Category object (3)>
+>>> Category.objects.create(name='Веб-дизайн')
+<Category: Category object (4)>
+
+Проверяем:
+>>> Category.objects.get(id=2).name
+'Python'
+
+-------------------------------------------------
+4. Добавить 2 статьи и 1 новость.
+
+author1 = Author.objects.get(id=1)
+Post.objects.create(author=author1, categoryType='AR', title='Особенности в Python 3.10.0', text='Некоторые из примечательных особенностей Python 3.10 включают...')
+<Post: Post object (1)>
+Проверяем:
+>>> Post.objects.get(id=1).title
+'Особенности в Python 3.10.0'
+
+Post.objects.create(author=author1, categoryType='NW', title='Вышла новая версия Python 3.10.0!!!', text='Python 3.10 будет получать обновления для исправления ошибок примерно каждые 2 месяца в течение примерно 18 месяцев...')
+<Post: Post object (2)>
+
+author2 = Author.objects.get(id=2)
+<Author: Author object (2)>
+Post.objects.create(author=author2, categoryType='AR', title='Движение — жизнь. Как мы используем динамический и генеративный дизайн', text='В последние десять лет в дизайне только и разговоров, что о динамическом брендинге. Это логично, динамический контент вытесняет статический, поэтому дизайну приходится подстраиваться...')
+<Post: Post object (3)>
+
+-------------------------------------------------
+5. Присвоить им категории (как минимум в одной статье/новости должно быть не меньше 2 категорий).
+
+ДЛЯ статьи 'Особенности в Python 3.10.0'
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=2))
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=3))
+
+ДЛЯ новости 'Вышла новая версия Python 3.10.0!!!'
+>>> Post.objects.get(id=2).postCategory.add(Category.objects.get(id=2))
+>>> Post.objects.get(id=2).postCategory.add(Category.objects.get(id=3))
+
+ДЛЯ статьи 'Движение — жизнь. Как мы используем динамический и генеративный дизайн'
+>>> Post.objects.get(id=3).postCategory.add(Category.objects.get(id=4))
+>>> Post.objects.get(id=3).postCategory.add(Category.objects.get(id=3))
+
+-------------------------------------------------
+6. Создать как минимум 4 комментария к разным объектам модели Post (в каждом объекте должен быть как минимум один комментарий).
+
+>>> Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=2).authorUser, text='Отличная статья, спасибо!')
+<Comment: Comment object (1)>
+
+>>> Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=Author.objects.get(id=2).authorUser, text='Отличная новость, погнали пробовать!')
+<Comment: Comment object (2)>
+
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=Author.objects.get(id=1).authorUser, text='Интересная статья, спасибо автору!')
+<Comment: Comment object (3)>
+
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=Author.objects.get(id=1).authorUser, text='Желаю тебе творческих успехов!')
+<Comment: Comment object (4)>
+
+-------------------------------------------------
+7. Применяя функции like() и dislike() к статьям/новостям и комментариям, скорректировать рейтинги этих объектов.
+
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).rating
+1
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).like()
+>>> Comment.objects.get(id=1).rating
+3
+
+>>> Comment.objects.get(id=2).like()
+>>> Comment.objects.get(id=2).dislike()
+>>> Comment.objects.get(id=2).dislike()
+>>> Comment.objects.get(id=2).dislike()
+>>> Comment.objects.get(id=2).rating
+-2
+
+-------------------------------------------------
+8. Обновить рейтинги пользователей.
+
+>>> author1 = Author.objects.get(id=1)
+>>> author1.update_rating()
+>>> author1.ratingAuthor
+0
+>>> author2 = Author.objects.get(id=2)
+>>> author2.update_rating()
+>>> author2.ratingAuthor
+3
+>>> Post.objects.get(id=3).like()
+>>> author2.update_rating()
+>>> author2.ratingAuthor
+6
+
+-------------------------------------------------
+9. Вывести username и рейтинг лучшего пользователя (применяя сортировку и возвращая поля первого объекта).
+
+>>> best_user = Author.objects.order_by('-ratingAuthor')[:1]
+>>> best_user
+<QuerySet [<Author: Author object (2)>]>
+>>> for i in best_user:
+...     i.ratingAuthor
+...     i.authorUser.username
+...
+6
+'Lera'
