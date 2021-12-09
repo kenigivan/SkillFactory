@@ -1,0 +1,20 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+{% block title %}
+    Все статьи...
+{% endblock %}
+
+
+{% block content %}
+    {% if posts %}
+        {% for post in posts %}
+            <h4>{{ post.title | Censor:"" }} </h4>
+            <p>Дата публикации: {{ post.dateCreation }}</p>
+            <p class="lead">{{ post.text|truncatechars:50 | Censor:"" }} </p>
+            <a href="{{ post.get_absolute_url }}">показать полностью</a>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <h2>К сожалению новостей пока нет!!!</h2>
+    {% endif %}
+{% endblock %}

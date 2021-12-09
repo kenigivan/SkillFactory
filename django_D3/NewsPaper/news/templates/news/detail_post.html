@@ -1,0 +1,13 @@
+{% extends 'default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+{% endblock %}
+
+
+{% block content %}
+    <h3>{{ title | Censor:"" }} </h3>
+    <p> {{ text | Censor:"" }} </p>
+     <h6>{{ datatime }}</h6>
+{% endblock %}
