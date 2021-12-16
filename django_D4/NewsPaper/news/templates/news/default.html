@@ -43,14 +43,12 @@
                 <div class="container">
                    <span class="navbar-brand text-white text-uppercase">
                        {% block title-container %}
-                       Новостная лента
-                       {% endblock title-container %}
+                       {% endblock %}
                    </span>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div class="collapse navbar-collapse">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="{% url 'create' %}">Добавить новость</a>
-                            </li>
+                                {% block nav-container %}
+                                {% endblock %}
                         </ul>
                     </div>
                 </div>

@@ -3,7 +3,16 @@
 {% block title %}
     Добавить новость
 {% endblock %}
-
+{% block title-container %}
+<span class="navbar-brand text-white text-uppercase">
+Добавление новости
+</span>
+{% endblock %}
+{% block nav-container %}
+<a class="nav-link text-white" href="{{request.META.HTTP_REFERER|escape}}">
+отмена
+</a>
+{% endblock %}
 {% block content %}
     <form method="POST">
         {% csrf_token %}

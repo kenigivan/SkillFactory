@@ -75,8 +75,11 @@ class Post(models.Model):
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
 
+    # def get_absolute_url(self):
+    #     return reverse('detail', kwargs={'pk': self.pk})
+
     def get_absolute_url(self):
-        return reverse('detail', kwargs={'pk': self.pk})
+        return f'/news/{self.pk}'
 
 
 class PostCategory(models.Model):

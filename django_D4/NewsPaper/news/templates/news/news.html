@@ -4,7 +4,20 @@
 {% block title %}
     Все новости
 {% endblock %}
+{% block title-container %}
+<span class="navbar-brand text-white text-uppercase">
+Новостная лента
+</span>
+{% endblock %}
+{% block nav-container %}
+<li class="nav-item">
+    <a class="nav-link text-white" href="{% url 'create' %}">
+        Добавить новость
+    </a>
+</li>
+{% endblock %}
 {% block content %}
+
 
 
 
