@@ -1,0 +1,11 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+{% block title %}
+ Подробнее о новости: {{ post.title | truncatechars:15  | Censor:""}}
+{% endblock %}
+{% block content %}
+    <h3>{{ post.title | Censor:"" }} </h3>
+    <p> {{ post.text | Censor:"" }} </p>
+    <h6>{{ post.dateCreation.date }}</h6>
+    <a href="{{request.META.HTTP_REFERER|escape}}">вернуться к списку новостей</a>
+{% endblock %}

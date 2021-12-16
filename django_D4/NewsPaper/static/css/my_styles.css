@@ -1,0 +1,27 @@
+.my_class {
+  display: inline-flex;
+  text-decoration: none; /* Отменяем подчеркивание у ссылки */
+}
+
+.my_class span {
+   padding: 5px;
+   color: blue;
+   font-size: 16px;
+   font-weight: bold;
+}
+
+.letter1 {
+    color: #FFFFFF;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+
+/*
+.my_class:active {
+   color: red;
+   font-size: 17px;
+   font-weight: bold;
+}
+*/
+
