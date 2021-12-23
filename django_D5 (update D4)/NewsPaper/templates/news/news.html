@@ -1,0 +1,103 @@
+{% extends 'news/default.html' %}
+{% load custom_filters %}
+{% load static %}
+{% block title %}
+    Все новости
+{% endblock %}
+{% block title-container %}
+<span class="navbar-brand text-white text-uppercase">
+Новостная лента
+</span>
+{% endblock %}
+{% block nav-container %}
+<li class="nav-item">
+    <a class="nav-link text-white" href="{% url 'create' %}">
+        Добавить новость
+    </a>
+</li>
+{% endblock %}
+{% block content %}
+
+
+
+
+<!-- Проверяем что поддерживается постраничный вывод -->
+{% if is_paginated %}
+
+    <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
+    {% if page_obj.has_previous %}
+        <a class="my_class" href="?page=1">
+            <img src="{% static 'img/prev_start_page.png' %}" alt="photo">
+        </a>
+        <a class="my_class" href="?page={{ page_obj.previous_page_number }}">
+            <img src="{% static 'img/prev_page.png' %}" alt="photo">
+        </a>
+    {% endif %}
+     <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <a class="my_class" ><span>{{ num }}</span></a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a class="my_class" href="?page={{ num }}">
+                {{ num }}
+            </a>
+        {% endif %}
+    {% endfor %}
+    <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+    {% if page_obj.has_next %}
+        <a class="my_class" href="?page={{ page_obj.next_page_number }}">
+            <img src="{% static 'img/next_page.png' %}" alt="photo">
+        </a>
+        <a class="my_class" href="?page={{ page_obj.paginator.num_pages }}">
+            <img src="{% static 'img/next_end_page.png' %}" alt="photo">
+        </a>
+    {% endif %}
+
+    <!-- Все новости -->
+    {% if news %}
+        {% for new in news %}
+            <h5>
+                <a href="{% url 'detail' new.pk %}">
+                    {{ new.title | Censor:"" }}
+                </a>
+            </h5>
+            <p class="lead">{{ new.text|truncatechars:200 | Censor:"" }} </p>
+            <p>дата публикации: {{ new.dateCreation.date }} | автор: {{new.author}}</p>
+           <!-- <a href="{{ new.pk }}">показать полностью</a>-->
+
+            <hr>
+        {% endfor %}
+    {% else %}
+        <h2>К сожалению новостей пока нет!!!</h2>
+    {% endif %}
+
+    <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
+    {% if page_obj.has_previous %}
+        <a class="my_class" href="?page=1">
+            <img src="{% static 'img/prev_start_page.png' %}" alt="photo">
+        </a>
+        <a class="my_class" href="?page={{ page_obj.previous_page_number }}">
+            <img src="{% static 'img/prev_page.png' %}" alt="photo">
+        </a>
+    {% endif %}
+     <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <a class="my_class" ><span>{{ num }}</span></a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a class="my_class" href="?page={{ num }}">
+                {{ num }}
+            </a>
+        {% endif %}
+    {% endfor %}
+    <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+    {% if page_obj.has_next %}
+        <a class="my_class" href="?page={{ page_obj.next_page_number }}">
+            <img src="{% static 'img/next_page.png' %}" alt="photo">
+        </a>
+        <a class="my_class" href="?page={{ page_obj.paginator.num_pages }}">
+            <img src="{% static 'img/next_end_page.png' %}" alt="photo">
+        </a>
+    {% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'news/default.html' %}
+{% load custom_filters %}
+{% block title %}
+ Подробнее о новости: {{ post.title | truncatechars:15  | Censor:""}}
+{% endblock %}
+
+    {% block title-container %}
+
+
+    <a class="nav-item" style="text-decoration: none;" href="{% url 'news' %}">
+        <span class="navbar-brand text-white text-uppercase">
+        лента новостей >
+        </span>
+    </a>
+    <span class="navbar-brand text-white text-uppercase">
+    Подробнее
+    </span>
+    <span class="navbar-brand text-white text-uppercase">
+        {{ post.title|Censor:""|truncatechars:25 }} >
+    </span>
+    {% endblock %}
+    {% block nav-container %}
+    <li class="nav-item">
+        <a class="nav-link text-white" href="{% url 'update' post.pk %}">
+            Редактировать
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" href="{% url 'delete' post.pk %}">
+            Удалить
+        </a>
+    </li>
+
+    {% endblock %}
+
+
+{% block content %}
+
+    <h3>{{ post.title | Censor:"" }} </h3>
+    <p> {{ post.text | Censor:"" }} </p>
+    <h6>{{ post.dateCreation.date }}</h6>
+    <a href="{{request.META.HTTP_REFERER|escape}}"> назад </a>
+{% endblock %}

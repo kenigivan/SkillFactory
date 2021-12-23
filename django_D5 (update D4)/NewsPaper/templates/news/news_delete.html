@@ -1,0 +1,33 @@
+{% extends 'news/default.html' %}
+{% load custom_filters %}
+{% block title %}
+ Подробнее о новости: {{ post.title | truncatechars:15  | Censor:""}}
+{% endblock %}
+
+    {% block title-container %}
+
+
+    <a class="nav-item" style="text-decoration: none;" href="{% url 'news' %}">
+        <span class="navbar-brand text-white text-uppercase">
+        лента новостей >
+        </span>
+    </a>
+    <span class="navbar-brand text-white text-uppercase">
+    Подтвердите удаление этой новости
+    </span>
+    <span class="navbar-brand text-white text-uppercase">
+        {{ post.title|Censor:""|truncatechars:25 }} >
+    </span>
+    {% endblock %}
+{% block content %}
+
+    <h3>{{ post.title | Censor:"" }} </h3>
+    <p> {{ post.text | Censor:"" }} </p>
+    <h6>{{ post.dateCreation.date }}</h6>
+    <a href="{{request.META.HTTP_REFERER|escape}}">вернуться к списку новостей</a>
+
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="подтвердить"></form>
+{% endblock content %}
